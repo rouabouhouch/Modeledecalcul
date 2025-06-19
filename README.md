@@ -351,198 +351,68 @@ Imagine que tu cherches un chemin dans une ville avec 5 arrêts (n=5).
 ---
 
 
-# Construire des fonctions de Gödel : Mode d’emploi avec exemples
+# Mini Cheat Sheet : Comment utiliser `Comp` pour construire des fonctions
+
+| Étape | Action                                                                          | Exemple concret                                            | Explication rapide                                                 |
+| ----- | ------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------ |
+| 1     | Identifier les fonctions de base ou déjà définies                               | `add`, `minus`, `times2`, `div2`, `π_{k,i}` (projection)   | Ce sont tes blocs Lego déjà faits                                  |
+| 2     | Pour créer une nouvelle fonction `h` qui utilise ces fonctions, tu écris        | `h = Comp(f, g_1, g_2, ..., g_n)`                          | `f` est la fonction principale, les `g_i` produisent ses arguments |
+| 3     | Chaque `g_i` peut être soit une projection, soit une autre composition          | Par exemple `g_1 = π_{2,1}`, `g_2 = Comp(times2, π_{2,2})` | Tu peux imbriquer `Comp` autant que tu veux                        |
+| 4     | La fonction finale s’écrit comme un arbre d’appels composés                     | Par exemple : `h(x,y) = add(x, times2(y))` devient         | `Comp(add, π_{2,1}, Comp(times2, π_{2,2}))`                        |
+| 5     | Pour les fonctions récursives primitives, utilise aussi `Rec` pour la récursion | Exemple : prédécesseur `pred = Rec(C0, π_{1,1})`           | `Rec(b, h)` définit `f(0) = b` et `f(k+1) = h(k, f(k))`            |
 
 ---
 
-## 1. Commence par les fonctions basiques
+# Schéma mental
 
-### Constantes, successeur, projections
+```
+              Comp
+             /    \
+            f      [g_1, g_2, ..., g_n]
+                    /       |        \
+            (proj1) (Comp)   (proj3) ...
 
-* **Constante $C_{k,c}$** : renvoie toujours la même valeur $c$, peu importe l’entrée.
-  Exemple :
-  $C_{1,0}(x) = 0$
+Exemple : h(x,y) = add(x, times2(y))
 
-* **Successeur $S(x) = x+1$** :
-  La fonction la plus simple, tu connais déjà.
+              Comp (add)
+             /           \
+         π_{2,1}      Comp (times2)
+                          |
+                     π_{2,2}
+```
 
-* **Projection $\pi_{k,i}(x_1, \dots, x_k) = x_i$** :
-  Elle te permet de récupérer un argument parmi plusieurs.
-
----
-
-## 2. Construis des fonctions simples par composition
-
-### Exemple 1 : Multiplication par 2 (times2)
-
-Formule :
-
-$$
-times2(x) = add(x, x)
-$$
-
-Construction :
-
-* $add$ : fonction d’addition (supposée déjà connue)
-* $\pi_{1,1}(x) = x$
-* Composition :
-
-  $$
-  times2 = Comp(add, \pi_{1,1}, \pi_{1,1})
-  $$
-
-**Comment calculer ?**
-
-Pour un $x$ donné :
-
-* Calcule $\pi_{1,1}(x) = x$ (deux fois)
-* Calcule $add(x, x) = 2x$
+* `Comp` : fonction principale + arguments transformés
+* `π_{k,i}` : projection, récupère un argument
+* Tu peux imbriquer `Comp` à volonté, toujours en respectant la structure.
 
 ---
 
-### Exemple 2 : Soustraction tronquée (diff)
+# Exemple complet avec explication pas à pas
 
-Formule récursive :
+**Construisons** la fonction `mod2(x)` = reste de la division de `x` par 2.
 
-$$
-diff(x,0) = x
-$$
+On sait :
 
-$$
-diff(x, y+1) = pred(diff(x,y))
-$$
+* `mod2(x) = x - times2(div2(x))`
+* `times2(x) = add(x, x)` (déjà défini)
+* `div2` est une fonction déjà définie
 
-Ici on utilise la récursion primitive avec :
-
-* Fonction de base $b(x) = x$
-* Fonction récursive $h(y, x, r) = pred(r)$ (où $r = diff(x,y)$)
-
-Formellement :
+**Forme `Comp`** :
 
 $$
-diff = Rec(b, h)
+mod2 = Comp(minus, \pi_{1,1}, Comp(times2, Comp(div2, \pi_{1,1})))
 $$
+
+**Décomposition :**
+
+* Le premier argument de `minus` est `π_{1,1}` → récupère `x`.
+* Le deuxième argument est `Comp(times2, Comp(div2, π_{1,1}))` → c’est la composition imbriquée qui fait :
+
+  * Prend `x` via `π_{1,1}`,
+  * Calcule `div2(x)`,
+  * Puis `times2(div2(x))`.
 
 ---
-
-## 3. Utilise la récursion primitive (Rec) pour créer des fonctions récursives
-
-### Exemple 3 : Prédécesseur (pred)
-
-Défini par :
-
-$$
-pred(0) = 0
-$$
-
-$$
-pred(k+1) = k
-$$
-
-Tu peux définir :
-
-* $b = C_{0,0}$ (constante 0)
-* $h(k, r) = k$ (projection de l'argument $k$)
-
----
-
-### Exemple 4 : Multiplication (Mult)
-
-Définition classique par récursion sur $x$ :
-
-$$
-Mult(0,y) = 0
-$$
-
-$$
-Mult(x+1, y) = add(y, Mult(x,y))
-$$
-
-Ici :
-
-* Fonction de base $b(y) = 0$ (constante zéro)
-* Fonction récursive $h(x, y, r) = add(y, r)$
-
----
-
-## 4. Étape suivante : minimisation (Min) pour fonctions générales
-
-### Exemple 5 : Division entière par 2 (div2)
-
-On cherche le plus petit $k$ tel que :
-
-$$
-2 \times k > x
-$$
-
-Soit :
-
-$$
-g(k,x) = 
-\begin{cases}
-0 & \text{si } 2k > x \\
-\neq 0 & \text{sinon}
-\end{cases}
-$$
-
-Alors :
-
-$$
-div2(x) = \min \{k \mid g(k, x) = 0 \} - 1
-$$
-
-Cette fonction est une fonction récursive (via minimisation), pas primitive récursive.
-
----
-
-## 5. Méthode générale pour construire une fonction complexe
-
-**Étapes** :
-
-1. **Identifie la fonction que tu veux construire** (ex : multiplication, division, reste, etc.)
-2. **Essaie de décomposer cette fonction en opérations plus simples** (ex : addition, prédécesseur, etc.)
-3. **Définis les fonctions de base et projections nécessaires**
-4. **Utilise la composition (Comp) pour combiner les fonctions simples**
-5. **Si la fonction est récursive (ex : multiplication, soustraction tronquée), utilise la récursion primitive (Rec)**
-6. **Si la fonction nécessite une recherche du plus petit argument satisfaisant une condition (ex : division), utilise la minimisation (Min)**
-7. **Teste la fonction sur des petits exemples**
-
----
-
-## 6. Exemples de fonctions classiques construites avec la méthode
-
-| Fonction                | Méthode             | Construction rapide                           | Remarques                     |
-| ----------------------- | ------------------- | --------------------------------------------- | ----------------------------- |
-| Successeur $S(x) = x+1$ | Fonction de base    | $S$ défini directement                        | Simple                        |
-| Prédécesseur $pred$     | Récursion primitive | $pred = Rec(C_0, \pi_1)$                      | prédécesseur de $k+1$ est $k$ |
-| Addition $add$          | Récursion primitive | $add(0,y)=y$, $add(x+1,y)=S(add(x,y))$        | construction classique        |
-| Multiplication $mult$   | Récursion primitive | $mult(0,y)=0$, $mult(x+1,y)=add(y,mult(x,y))$ |                               |
-| Division entière (div2) | Minimisation        | $\min\{k \mid 2k > x\} - 1$                   | via $Min$                     |
-| Reste modulo 2 (mod2)   | Composition + div2  | $mod2(x) = x - 2 \times div2(x)$              | Combine plusieurs fonctions   |
-
----
-
-## 7. Bonus : Exemple complet calcul "mod2" avec les méthodes de Gödel
-
-* Étape 1 : Construire $times2(x) = add(x, x)$ (composition)
-* Étape 2 : Construire $div2$ par minimisation
-* Étape 3 : Construire $mod2(x) = x - times2(div2(x))$ (composition + soustraction)
-
----
-
-## En bref
-
-Pour faire **beaucoup** de fonctions de Gödel :
-
-* Tu maîtrises d’abord la base : constantes, successeur, projections
-* Tu combines avec la **composition** pour faire des fonctions simples composées
-* Tu passes à la **récursion primitive** quand la fonction est définie par récurrence
-* Tu utilises la **minimisation** pour les fonctions qui recherchent un argument minimal satisfaisant une condition
-* Tu testes systématiquement sur des exemples concrets
-
----
-
-
 
 
 
