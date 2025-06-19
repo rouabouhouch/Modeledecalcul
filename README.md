@@ -66,3 +66,276 @@
 ---
 
 
+### 🧠 Machine Universelle (Mu) – Synthèse **avec exemples concrets**
+
+| **Aspect**                           | **Définition / Fonction**                                                                                                                                | **Exemple concret**                                                                                        |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| 🔍 **Définition**                    | Mu est une machine de Turing capable de **simuler** toute autre machine M sur une entrée `w`. Elle lit le code de M et exécute ses instructions sur `w`. | Comme un **interpréteur Python** qui lit un fichier `.py` et l’exécute ligne par ligne.                    |
+| 🧾 **Entrée de Mu**                  | Un mot codé contenant la **description de la machine M** (⟨M⟩) + un **mot d’entrée** `w` pour cette machine.                                             | Exemple : `⟨M_pair⟩#1010`, où M\_pair teste si un binaire est pair.                                        |
+| 💽 **Bandes utilisées (à 3 bandes)** | **B1** : contient `⟨M⟩#w` <br> **B2** : simule la bande de M <br> **B3** : stocke l’état courant de M                                                    | B1 : description complète d’un programme + son input. <br> B2 : comme la RAM d’un programme en cours.      |
+| ⚙️ **Fonctionnement**                | Mu copie `w` sur B2, `q0` sur B3. Puis elle lit B1 pour chercher la règle `(état, symbole)` de M. Elle simule l’effet : écrit, bouge, change état.       | Si `⟨M⟩` dit "si tu lis 1 en état q0, écris 0 et va à q1", Mu le fait sur B2 et B3.                        |
+| 🔄 **Simulation**                    | À chaque étape, Mu lit l’état (B3), le symbole lu (B2), trouve la règle (dans B1), puis applique la transition.                                          | C’est comme si tu suivais un tutoriel codé étape par étape pour exécuter manuellement un programme.        |
+| 📥 **Programme = donnée**            | ⟨M⟩ n’est pas exécuté "en dur" mais **lu comme donnée**. Donc un programme peut être lu et exécuté par un autre.                                         | Tu peux stocker du code dans un fichier texte et le faire exécuter par Python = exactement ce que fait Mu. |
+
+---
+
+### 💥 Impacts concrets et implications de Mu
+
+| **Conséquence**                                 | **Explication**                                                                                                           | **Exemple concret**                                                                                           |                                                                                                        |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| ✅ **Appartenance semi-décidable**               | Si tu veux savoir si une machine M accepte `w`, Mu peut le simuler. Si M accepte `w`, Mu finit par l’accepter aussi.      | Ex : `⟨M_pair⟩#1010` → Mu tourne et accepte car 1010 est pair.                                                |                                                                                                        |
+| 🚫 **Pas de rejet certain**                     | Si `w` n’est pas accepté par M, Mu peut **tourner en boucle** sans jamais s’arrêter.                                      | Ex : `⟨M_pair⟩#111` (111 = impair), M tourne en boucle → Mu aussi. Pas de "non" garanti.                      |                                                                                                        |
+| 🔥 **Problème de l’arrêt**                      | On ne peut pas savoir si M va **s’arrêter** ou **boucler** sur une entrée `w`.                                            | Ex : `⟨M_inf⟩#w`, où M\_inf est conçue pour boucler tout le temps : impossible de le détecter **à coup sûr**. |                                                                                                        |
+| ❌ **Complément non calculable**                 | Le complément de \`Lu = {⟨M,w⟩                                                                                            | M accepte w}\` **n’est pas** récursivement énumérable.                                                        | Il n’existe pas de machine qui accepte ⟨M,w⟩ **seulement** quand M **rejette** w ou tourne à l’infini. |
+| 🚧 **Limites claires de la calculabilité**      | Mu montre qu’il y a des choses que **même un super ordi infini** ne peut pas résoudre.                                    | Comme "ce programme va-t-il tourner pour toujours ?" → même Mu ne peut pas répondre.                          |                                                                                                        |
+| 🔁 **Réduction = propagation d’indécidabilité** | En partant du problème de l’arrêt, on peut **prouver que d’autres problèmes sont aussi indécidables**.                    | Ex : savoir si `L(M) = ∅` → tu peux construire une MT M’ basée sur M et dire : si elle s’arrête, alors...     |                                                                                                        |
+| 📚 **Théorème de Rice**                         | Toute propriété **non triviale** (pas toujours vraie ou fausse) sur les langages acceptés par une MT est **indécidable**. | "Est-ce que M accepte un langage fini ?" → pas décidable. "Est-ce que M accepte un palindrome ?" → pareil.    |                                                                                                        |
+
+---
+
+### 🎯 Résumé simple à retenir :
+
+| 🧠 Ce qu’il faut retenir de Mu                                                     |
+| ---------------------------------------------------------------------------------- |
+| ✔ Mu = simulateur général de n’importe quelle machine de Turing                    |
+| ✔ Elle **prouve que les programmes peuvent être traités comme des données**        |
+| ✔ Grâce à elle, on **définit les langages récursivement énumérables**              |
+| ❌ Elle ne permet pas de résoudre le **problème de l’arrêt**                        |
+| ❌ Elle révèle l’**existence de limites** dans ce qui est calculable                |
+| ✔ Elle est utilisée pour **réduire** des problèmes et **prouver l’indécidabilité** |
+
+---
+
+
+
+## 🧪 **EXEMPLE : Mu simule une machine M qui accepte seulement le mot `0`**
+
+### 🎯 But :
+
+La machine M accepte le mot `0`, et **rejette tout le reste**.
+On veut que **Mu simule M sur deux entrées** :
+
+* ✅ Cas 1 : `⟨M⟩#0` → M accepte `0`
+* ❌ Cas 2 : `⟨M⟩#1` → M rejette `1` (en tournant en boucle ici, pour illustrer la semi-décidabilité)
+
+---
+
+## 🧰 Composants de la Machine Universelle (Mu)
+
+| **Bande**   | **Contenu initial**                                | **Rôle**                                                |
+| ----------- | -------------------------------------------------- | ------------------------------------------------------- |
+| **Bande 1** | `⟨M⟩#w` (code de la machine + mot `w` à tester)    | Contient la **description de M** + **mot d'entrée `w`** |
+| **Bande 2** | Vide au départ → contiendra le **mot `w`**         | Simule la **bande de M**                                |
+| **Bande 3** | Vide au départ → contiendra **l’état courant** `q` | Suivre l’**état dans lequel se trouve M**               |
+
+---
+
+## ✅ **Cas 1 : Mu simule `⟨M⟩#0`**
+
+| Étape | Bande 1 (⟨M⟩#0) | Bande 2 (bande simulée de M) | Bande 3 (état de M) | Explication                                                |
+| ----- | --------------- | ---------------------------- | ------------------- | ---------------------------------------------------------- |
+| 1     | `⟨M⟩#0`         | `0`                          | `q0`                | Mu copie `0` sur B2 et met `q0` sur B3                     |
+| 2     | `⟨M⟩#0`         | `0`                          | `q0`                | Mu lit : dans `q0` sur symbole `0`, va à `qf` (état final) |
+| 3     | `⟨M⟩#0`         | `0`                          | `qf`                | L'état final est atteint : **Mu accepte**                  |
+
+🎉 Résultat : **Mu accepte** cette entrée → donc `0 ∈ L(M)`
+
+---
+
+## ❌ **Cas 2 : Mu simule `⟨M⟩#1`**
+
+| Étape | Bande 1 (⟨M⟩#1) | Bande 2 (bande simulée de M) | Bande 3 (état de M) | Explication                                               |
+| ----- | --------------- | ---------------------------- | ------------------- | --------------------------------------------------------- |
+| 1     | `⟨M⟩#1`         | `1`                          | `q0`                | Mu copie `1` sur B2 et met `q0` sur B3                    |
+| 2     | `⟨M⟩#1`         | `1`                          | `q0`                | Mu cherche une règle dans ⟨M⟩ pour `(q0,1)`...            |
+| 3     | `⟨M⟩#1`         | `1`                          | `q0`                | ... il n’y en a pas. Alors soit Mu boucle, soit M boucle. |
+| 4+    | `⟨M⟩#1`         | `1`                          | `q0`                | La machine **ne termine jamais**.                         |
+
+😵 Résultat : **Mu ne s'arrête pas**, car M ne sait pas quoi faire → `1 ∉ L(M)`
+
+---
+
+## 🧠 Ce que tu vois ici :
+
+| Situation | Mu s'arrête ? | Résultat                                      |
+| --------- | ------------- | --------------------------------------------- |
+| `⟨M⟩#0`   | Oui           | Mot accepté ✅                                 |
+| `⟨M⟩#1`   | Non           | Pas accepté ❌ mais **pas de "non" explicite** |
+
+💡 **Et c’est exactement pour ça que ce langage `Lu = {⟨M,w⟩ | M accepte w}` est semi-décidable et pas décidable** :
+Tu peux savoir quand c’est **oui**, mais tu ne sauras jamais vraiment quand c’est **non**.
+
+---
+
+### 🧾 Énumérateur – Tableau synthèse avec exemples concrets
+
+| **Catégorie**                     | **Concept**          | **Définition / Propriété**                                                                                 | **Exemple concret / Info Clé**                                        |                                                      |
+| --------------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------- |
+| 🔧 **Structure d’un énumérateur** | Bande de travail     | Bande standard pour effectuer les calculs                                                                  | Comme une MT normale                                                  |                                                      |
+|                                   | Bande de sortie      | Tête ne va qu’à droite, **imprime les mots du langage** un par un                                          | Sortie en série : `w₁`, `w₂`, `w₃`, …                                 |                                                      |
+|                                   | Ordre canonique      | Les mots peuvent être énumérés selon un **ordre logique** (ex: binaire croissant)                          | Ex : "", "0", "1", "00", "01", "10", "11", etc.                       |                                                      |
+| 🧠 **Définition clé**             | Énumérateur          | MT qui **produit tous les mots d’un langage** L, sans entrée                                               | Il imprime en boucle tous les `w ∈ L`, un après l’autre               |                                                      |
+|                                   | Équivalence          | **L est récursivement énumérable ⇔ L est énumérable**                                                      | Si L est r.é., alors il existe un énumérateur pour L                  |                                                      |
+| ✅ **Sens direct**                 | r.é. ⇒ énumérable    | Une MT qui accepte L peut être modifiée pour **énumérer tous les mots** qu’elle accepte                    | On génère tous les mots possibles, et on les teste un par un          |                                                      |
+| 🔁 **Sens réciproque**            | énumérable ⇒ r.é.    | Si un mot est imprimé par l’énumérateur, alors il appartient à L → on peut construire une MT qui accepte L | Pour reconnaître `w`, on attend qu’il sorte : s’il sort, on accepte   |                                                      |
+| 📚 **Implications**               | Langage r.é.         | Les mots de L peuvent être **produits** (mais pas nécessairement testés ou rejetés)                        | Ex : \`Lu = {⟨M,w⟩                                                    | M accepte w}\` est r.é. mais pas récursif            |
+|                                   | Langage non r.é.     | Si aucun énumérateur n’existe pour un langage, alors ce langage **n’est pas** récursivement énumérable     | Ex : \`¬Lu = {⟨M,w⟩                                                   | M n’accepte pas w}\` n’est **même pas** r.é.         |
+| 🚫 **Décidabilité**               | Langage récursif     | S’il existe des **énumérateurs pour L et ¬L**, alors L est **décidable**                                   | On peut tester les deux en parallèle : le mot va sortir d’un des deux |                                                      |
+|                                   | Langage non récursif | Si `L` est r.é. mais `¬L` ne l’est pas, alors **L n’est pas récursif**                                     | Typique des problèmes comme le **problème de l’arrêt**                |                                                      |
+| 🔥 **Problème de l’arrêt**        | Lu = {⟨M, w⟩         | M accepte w}                                                                                               | Est r.é. (→ a un énumérateur), mais pas récursif                      | On peut énumérer les couples ⟨M,w⟩ où M accepte w    |
+|                                   | ¬Lu = {⟨M, w⟩        | M n’accepte pas w}                                                                                         | N’est pas r.é. (→ aucun énumérateur possible)                         | Donc on **ne peut pas prouver** qu’un mot est rejeté |
+
+---
+
+### 🧠 Résumé express : ce qu’il faut graver dans ton cortex 🧠
+
+| ✅ Rappels clés                                                                   |
+| -------------------------------------------------------------------------------- |
+| 🔹 Un langage est **r.é.** ↔ il existe un **énumérateur** qui le produit         |
+| 🔹 L’énumérateur **sort** tous les mots du langage, dans un certain ordre        |
+| 🔹 Il **ne prend pas de mot en entrée** : il **produit** les éléments du langage |
+| 🔹 Le **problème de l’arrêt** est r.é. (donc énumérable) mais **non récursif**   |
+| 🔹 Son complément n’est **même pas r.é.**, donc **non énumérable**               |
+
+---
+
+
+| **Catégorie**                         | **Concept**                               | **Définition / Propriété**                                                                                 | **Exemple / Info clé**                                                                             |
+| ------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| **Problèmes**                         | Problème de décision                      | Question avec réponse "oui" ou "non" : est-ce que \$w \in L\$ ?                                            | Décider si un mot appartient à un langage donné                                                    |
+|                                       | Décidable                                 | Machine de Turing s’arrête toujours, accepte si \$w \in L\$, rejette sinon                                 | Langage récursif                                                                                   |
+|                                       | Semi-décidable (récursivement énumérable) | Machine de Turing s’arrête et accepte si \$w \in L\$, sinon peut boucler ou rejeter                        | Langage semi-décidable (exemple : problème de l’arrêt)                                             |
+|                                       | Fonction Turing-calculable                | Fonction calculable par une Machine de Turing qui s’arrête pour toute entrée                               | Exemple : \$f(x) = x + 1\$                                                                         |
+| **Complexité et NP**                  | NP                                        | Classe de problèmes où la solution peut être vérifiée en temps polynomial                                  | Sudoku, SAT                                                                                        |
+|                                       | NP-Complétude                             | Problème dans NP auquel tous les autres problèmes NP peuvent se réduire en temps polynomial                | SAT est un problème NP-complet                                                                     |
+|                                       | Réduction polynomiale                     | Transformation rapide (en temps polynomial) d’un problème \$P\_1\$ vers \$P\_2\$                           | Si \$P\_1 \leadsto P\_2\$ et \$P\_1\$ NP-complet alors \$P\_2\$ est NP-difficile                   |
+|                                       | Méthode pour prouver NP-complétude        | 1) Montrer que \$P\_2\$ est dans NP ; 2) Réduire un problème NP-complet \$P\_1\$ à \$P\_2\$ rapidement     | Si OK, alors \$P\_2\$ est NP-complet                                                               |
+| **Exemples de problèmes NP-Complets** | TRIPARTITE MATCHING (TM)                  | Trouver triplets disjoints couvrant trois ensembles \$B, G, H\$                                            | Problème NP-complet connu                                                                          |
+|                                       | EXACT COVER BY 3-SETS (EC)                | Trouver \$m\$ ensembles de 3 éléments disjoints couvrant un ensemble \$U\$                                 | Réduction de TM à EC prouvant la NP-complétude de EC                                               |
+|                                       | CIRCUIT HAMILTONIEN                       | Trouver un chemin passant une seule fois par tous les sommets                                              | Problème NP-complet classique                                                                      |
+|                                       | CIRCUIT LE PLUS LONG                      | Trouver un circuit de longueur ≥ \$k\$ sans répétition de sommets                                          | NP-complet, réduit depuis CIRCUIT HAMILTONIEN                                                      |
+|                                       | CLIQUE                                    | Trouver un sous-graphe complet de taille \$k\$                                                             | Problème NP-complet                                                                                |
+|                                       | ENSEMBLE INDÉPENDANT                      | Trouver un ensemble de \$k\$ sommets sans arêtes entre eux                                                 | NP-complet, réduction depuis CLIQUE                                                                |
+|                                       | SET PACKING                               | Trouver \$k\$ ensembles disjoints dans une famille d’ensembles                                             | NP-complet, réduction depuis EXACT COVER BY 3-SETS                                                 |
+| **Réductions et implications**        | Réduction \$L\_1 \leadsto L\_2\$          | \$w \in L\_1\$ si et seulement si \$f(w) \in L\_2\$, avec \$f\$ calculable en temps polynomial             | Si \$L\_2\$ est récursif alors \$L\_1\$ l’est ; si \$L\_1\$ indécidable alors \$L\_2\$ l’est aussi |
+|                                       | NP-complétude                             | Les problèmes les plus durs de NP : résoudre un seul NP-complet permet de résoudre tous les autres en poly | Point clé pour classer les problèmes                                                               |
+
+---
+Bien sûr, voici le tableau sans les symboles \$ pour que ce soit plus fluide et simple :
+
+| **Étape**                                     | **Description**                                                                                          | **Exemple / Détail**                                                                                           |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **1. Vérifier que P2 est dans NP**            | Montrer qu'une solution candidate pour P2 peut être vérifiée en temps polynomial par une MT déterministe | Pour EXACT COVER (EC), vérifier qu’une proposition de couverture est correcte en temps polynomial              |
+| **2. Réduire un problème P1 NP-Complet à P2** | Construire une transformation rapide (polynomiale) d’une instance w de P1 en une instance f(w) de P2     | Réduction de TRIPARTITE MATCHING (TM) à EXACT COVER (EC) : transformer les triplets en ensembles de 3 éléments |
+| **Conclusion**                                | Si P2 est dans NP et P1 réduit à P2, alors P2 est NP-Complet                                             | EC est NP-Complet car TM est NP-Complet et réduit à EC                                                         |
+| **Exemple 1 : TM → EC**                       | TM : triplets disjoints couvrant B, G, H (NP-Complet)                                                    | EC : trouver m ensembles disjoints de taille 3 couvrant un ensemble U de cardinal 3m                           |
+| **Exemple 2 : CH → CLL**                      | CH (Circuit Hamiltonien) est NP-Complet                                                                  | CLL (Circuit le plus long) : montrer que CH est un cas particulier de CLL, donc réduction polynomiale possible |
+| **Exemple 3 : CLIQUE → EI**                   | CLIQUE (sous-graphe complet) est NP-Complet                                                              | EI (Ensemble Indépendant) correspond à clique dans graphe complémentaire ; réduction polynomiale               |
+| **Exemple 4 : EC → SP**                       | EC est NP-Complet                                                                                        | SP (Set Packing) : chercher k ensembles disjoints, réduction polynomiale à partir d’EC                         |
+
+---
+
+Bref, la recette pour prouver qu’un problème est NP-Complet, c’est :
+
+1. montrer qu’il est dans NP, et
+2. montrer que tu peux réduire un problème déjà NP-Complet en lui.
+
+Ça garantit que le problème est aussi dur que les plus durs de NP.
+
+### exemple:
+---
+
+| Étape                                        | Description détaillée                                                                                                                                                                                                                                                                                                   |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. Définition du problème P₂**             | **CIRCUIT LE PLUS LONG (CLL)** :<br>- Données : un graphe G de n nœuds et un entier k.<br>- Question : existe-t-il un circuit dans G de longueur ≥ k, sans répéter un nœud ?                                                                                                                                            |
+| **2. Montrer que P₂ est dans NP**            | On peut vérifier rapidement (en temps polynomial) qu’un circuit candidat :<br>- A une longueur ≥ k.<br>- Ne passe pas deux fois par le même nœud.<br>Donc CLL ∈ NP.                                                                                                                                                     |
+| **3. Choix du problème P₁**                  | On prend comme P₁ le problème **CIRCUIT HAMILTONIEN (CH)**, qui est déjà prouvé NP-Complet :<br>chercher un circuit passant une fois par chaque nœud (longueur = n).                                                                                                                                                    |
+| **4. Réduction polynomiale P₁ → P₂**         | Transformation simple et rapide (polynomiale) :<br>- Instance CH : graphe G.<br>- Instance CLL : même graphe G, et k = n (nombre de nœuds).                                                                                                                                                                             |
+| **5. Preuve de la validité de la réduction** | - Si G a un circuit hamiltonien, alors il existe un circuit de longueur exactement n dans G → instance CLL (G, n) a réponse "oui".<br>- Si CLL (G, n) est "oui", alors il existe un circuit de longueur ≥ n dans G, donc forcément un circuit hamiltonien (car il ne peut pas y avoir plus de n nœuds sans répétition). |
+| **6. Conclusion**                            | Puisque :<br>- P₂ = CLL est dans NP.<br>- P₁ = CH est NP-Complet et se réduit polynômialement à P₂.<br>Alors CLL est NP-Complet.                                                                                                                                                                                        |
+
+---
+
+### Pourquoi c’est important ?
+
+* La vérification rapide d’une solution candidate (étape 2) signifie que CLL appartient à NP.
+* La réduction polynomiale (étape 4-5) montre que si on pouvait résoudre CLL efficacement, on pourrait aussi résoudre CH efficacement.
+* Comme CH est un problème "difficile" connu, CLL l’est aussi.
+* Ce raisonnement est la base de la preuve de NP-Complétude : on se sert d’un problème dur déjà connu (CH) pour montrer qu’un nouveau problème (CLL) est au moins aussi dur.
+
+---
+
+### En résumé ultra-simple
+
+* **CLL est facile à vérifier → CLL ∈ NP.**
+* **CH ≤p CLL (réduction polynomiale).**
+* **CH est NP-Complet.**
+* Donc **CLL est NP-Complet.**
+
+---
+
+
+### Focus sur la **Réduction Polynomiale** et sa **Preuve de Validité**
+
+**Contexte :**
+On veut prouver que **CLL** (Circuit le Plus Long) est au moins aussi dur que **CH** (Circuit Hamiltonien), qui est déjà connu super dur (NP-Complet).
+
+---
+
+### C’est quoi une réduction polynomiale ?
+
+C’est une **transformation efficace (rapide, en temps polynomial)** d’un problème qu’on connaît bien (ici CH) vers un autre (ici CLL) de façon à ce que :
+
+* Si tu sais résoudre le problème cible (CLL), tu peux l’utiliser pour résoudre le problème source (CH).
+* En gros, résoudre CLL = pouvoir résoudre CH, donc CLL est au moins aussi compliqué que CH.
+
+---
+
+### Dans notre exemple :
+
+| Action                   | Exemple concret                                                                                                |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| **Problème source (CH)** | Trouver un circuit passant une fois par tous les nœuds du graphe G (longueur = n)                              |
+| **Problème cible (CLL)** | Trouver un circuit de longueur au moins k dans le graphe G (sans repasser par un nœud)                         |
+| **Réduction**            | Prends l’instance CH (graphe G) et transforme-la en instance CLL : même graphe G + k = nombre de nœuds (k = n) |
+
+---
+
+### Pourquoi cette réduction marche ? (preuve de validité)
+
+1. **Si CH est "oui" (c’est-à-dire qu’il existe un circuit hamiltonien dans G), alors CLL est "oui" pour (G, n)**
+
+   * Parce que ce circuit hamiltonien est un circuit de longueur exactement n (tous les nœuds).
+   * Donc, dans CLL, on cherche un circuit de longueur ≥ n → ce circuit est pile ce qu’on cherche.
+
+2. **Si CLL est "oui" pour (G, n), alors CH est "oui"**
+
+   * Parce que si tu trouves un circuit de longueur ≥ n sans répéter de nœud, et que le graphe a exactement n nœuds, alors ce circuit doit forcément passer par **tous les nœuds une seule fois** (sinon impossible de faire plus long).
+   * Donc ce circuit est un circuit hamiltonien.
+
+---
+
+### En résumé simple :
+
+* Pour chaque instance du problème CH, on crée une instance équivalente du problème CLL en fixant k = nombre de nœuds.
+* Résoudre CLL, c’est résoudre CH (au moins aussi dur).
+* La transformation ne prend pas trop de temps (juste un simple passage du nombre de nœuds en paramètre).
+* Donc, si on trouve un algorithme efficace pour CLL, on en aurait un pour CH — or on sait que CH est dur → CLL est aussi dur.
+
+---
+
+### Illustration imagée :
+
+Imagine que tu cherches un chemin dans une ville avec 5 arrêts (n=5).
+
+* CH : "Est-ce que je peux faire un tour qui passe une fois par chaque arrêt ?"
+* CLL : "Est-ce que je peux faire un tour qui fait au moins k arrêts sans passer deux fois par le même ?"
+  Si tu poses k=5, répondre "oui" à CLL, c’est répondre "oui" à CH.
+
+---
+
+
+
+
+
+
