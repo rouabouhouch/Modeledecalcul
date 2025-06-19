@@ -334,6 +334,214 @@ Imagine que tu cherches un chemin dans une ville avec 5 arrêts (n=5).
 
 ---
 
+### Fonction Rec
+| **Thème**                                   | **Description Simplifiée**                                                                                                                              | **Exemples / Remarques**                                                                                        |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Contexte général**                        | Les fonctions récursives sont un modèle de calcul fondamental, équivalent aux machines de Turing et au λ-calcul.                                        | Fonctions définies à partir de fonctions simples et de schémas (composition, récursion, minimisation).          |
+| **Fonctions récursives primitives (RP)**    | Fonctions construites par composition et récursion primitive, toujours totales (toujours définies).                                                     | Constantes, successeur (x+1), projections, addition, multiplication, prédécesseur, négation, etc.               |
+| **Schéma de minimisation**                  | Permet de définir des fonctions partielles en cherchant le plus petit k tel que g(k, args) = 0, ce qui étend RP aux fonctions récursives générales (R). | Exemple : division entière par 2, racine carrée entière, fonctions qui peuvent ne pas s’arrêter (non totales).  |
+| **Exemples précis de fonctions**            | Multiplication par 2, division entière par 2, reste modulo 2, prédécesseur, négation, conjonction logique, test d'égalité, soustraction tronquée, etc.  | Certaines sont primitives, d'autres utilisent la minimisation (donc pas primitives).                            |
+| **Fonctions de manipulation de listes**     | Fonctions pour accéder aux éléments, inverser, compter la longueur, etc., définies par récursion et minimisation.                                       | nth, revnth, length (longueur), nthrm (k-ième reste), etc.                                                      |
+| **Fonctions modélisant Machines de Turing** | Codage des configurations et règles de transition comme fonctions récursives, pour étudier la calculabilité des MT.                                     | Transition codée par des fonctions f1, f2, f3 sur la configuration.                                             |
+| **Fonctions dans le λ-calcul**              | λ-calcul peut représenter les mêmes fonctions récursives (ADD, MULT, points fixes, somme de listes, etc.), montrant l'équivalence des modèles.          | Opérateur de point fixe, addition, multiplication, doubler, carré, somme des carrés dans une liste, longueur.   |
+| **Équivalence des modèles**                 | Fonctions récursives = fonctions calculables par MT = fonctions exprimables en λ-calcul (Thèse de Church-Turing).                                       | Toutes les notions de calculabilité reposent sur cette équivalence.                                             |
+| **Totalité et partialité**                  | RP : fonctions totales (toujours finies). R : fonctions récursives générales, peuvent être partielles (pas toujours définies).                          | Le système T de Gödel exprime plus que RP mais pas toutes les fonctions totales.                                |
+| **Rôle en complexité**                      | Ces fonctions servent de base aux notions de temps polynomial et aux réductions entre problèmes, fondement des preuves de NP-Complétude.                | Opérations de base (add, mult) sont calculables en temps polynomial, ce qui rend les transformations efficaces. |
+
+---
+
+
+# Construire des fonctions de Gödel : Mode d’emploi avec exemples
+
+---
+
+## 1. Commence par les fonctions basiques
+
+### Constantes, successeur, projections
+
+* **Constante $C_{k,c}$** : renvoie toujours la même valeur $c$, peu importe l’entrée.
+  Exemple :
+  $C_{1,0}(x) = 0$
+
+* **Successeur $S(x) = x+1$** :
+  La fonction la plus simple, tu connais déjà.
+
+* **Projection $\pi_{k,i}(x_1, \dots, x_k) = x_i$** :
+  Elle te permet de récupérer un argument parmi plusieurs.
+
+---
+
+## 2. Construis des fonctions simples par composition
+
+### Exemple 1 : Multiplication par 2 (times2)
+
+Formule :
+
+$$
+times2(x) = add(x, x)
+$$
+
+Construction :
+
+* $add$ : fonction d’addition (supposée déjà connue)
+* $\pi_{1,1}(x) = x$
+* Composition :
+
+  $$
+  times2 = Comp(add, \pi_{1,1}, \pi_{1,1})
+  $$
+
+**Comment calculer ?**
+
+Pour un $x$ donné :
+
+* Calcule $\pi_{1,1}(x) = x$ (deux fois)
+* Calcule $add(x, x) = 2x$
+
+---
+
+### Exemple 2 : Soustraction tronquée (diff)
+
+Formule récursive :
+
+$$
+diff(x,0) = x
+$$
+
+$$
+diff(x, y+1) = pred(diff(x,y))
+$$
+
+Ici on utilise la récursion primitive avec :
+
+* Fonction de base $b(x) = x$
+* Fonction récursive $h(y, x, r) = pred(r)$ (où $r = diff(x,y)$)
+
+Formellement :
+
+$$
+diff = Rec(b, h)
+$$
+
+---
+
+## 3. Utilise la récursion primitive (Rec) pour créer des fonctions récursives
+
+### Exemple 3 : Prédécesseur (pred)
+
+Défini par :
+
+$$
+pred(0) = 0
+$$
+
+$$
+pred(k+1) = k
+$$
+
+Tu peux définir :
+
+* $b = C_{0,0}$ (constante 0)
+* $h(k, r) = k$ (projection de l'argument $k$)
+
+---
+
+### Exemple 4 : Multiplication (Mult)
+
+Définition classique par récursion sur $x$ :
+
+$$
+Mult(0,y) = 0
+$$
+
+$$
+Mult(x+1, y) = add(y, Mult(x,y))
+$$
+
+Ici :
+
+* Fonction de base $b(y) = 0$ (constante zéro)
+* Fonction récursive $h(x, y, r) = add(y, r)$
+
+---
+
+## 4. Étape suivante : minimisation (Min) pour fonctions générales
+
+### Exemple 5 : Division entière par 2 (div2)
+
+On cherche le plus petit $k$ tel que :
+
+$$
+2 \times k > x
+$$
+
+Soit :
+
+$$
+g(k,x) = 
+\begin{cases}
+0 & \text{si } 2k > x \\
+\neq 0 & \text{sinon}
+\end{cases}
+$$
+
+Alors :
+
+$$
+div2(x) = \min \{k \mid g(k, x) = 0 \} - 1
+$$
+
+Cette fonction est une fonction récursive (via minimisation), pas primitive récursive.
+
+---
+
+## 5. Méthode générale pour construire une fonction complexe
+
+**Étapes** :
+
+1. **Identifie la fonction que tu veux construire** (ex : multiplication, division, reste, etc.)
+2. **Essaie de décomposer cette fonction en opérations plus simples** (ex : addition, prédécesseur, etc.)
+3. **Définis les fonctions de base et projections nécessaires**
+4. **Utilise la composition (Comp) pour combiner les fonctions simples**
+5. **Si la fonction est récursive (ex : multiplication, soustraction tronquée), utilise la récursion primitive (Rec)**
+6. **Si la fonction nécessite une recherche du plus petit argument satisfaisant une condition (ex : division), utilise la minimisation (Min)**
+7. **Teste la fonction sur des petits exemples**
+
+---
+
+## 6. Exemples de fonctions classiques construites avec la méthode
+
+| Fonction                | Méthode             | Construction rapide                           | Remarques                     |
+| ----------------------- | ------------------- | --------------------------------------------- | ----------------------------- |
+| Successeur $S(x) = x+1$ | Fonction de base    | $S$ défini directement                        | Simple                        |
+| Prédécesseur $pred$     | Récursion primitive | $pred = Rec(C_0, \pi_1)$                      | prédécesseur de $k+1$ est $k$ |
+| Addition $add$          | Récursion primitive | $add(0,y)=y$, $add(x+1,y)=S(add(x,y))$        | construction classique        |
+| Multiplication $mult$   | Récursion primitive | $mult(0,y)=0$, $mult(x+1,y)=add(y,mult(x,y))$ |                               |
+| Division entière (div2) | Minimisation        | $\min\{k \mid 2k > x\} - 1$                   | via $Min$                     |
+| Reste modulo 2 (mod2)   | Composition + div2  | $mod2(x) = x - 2 \times div2(x)$              | Combine plusieurs fonctions   |
+
+---
+
+## 7. Bonus : Exemple complet calcul "mod2" avec les méthodes de Gödel
+
+* Étape 1 : Construire $times2(x) = add(x, x)$ (composition)
+* Étape 2 : Construire $div2$ par minimisation
+* Étape 3 : Construire $mod2(x) = x - times2(div2(x))$ (composition + soustraction)
+
+---
+
+## En bref
+
+Pour faire **beaucoup** de fonctions de Gödel :
+
+* Tu maîtrises d’abord la base : constantes, successeur, projections
+* Tu combines avec la **composition** pour faire des fonctions simples composées
+* Tu passes à la **récursion primitive** quand la fonction est définie par récurrence
+* Tu utilises la **minimisation** pour les fonctions qui recherchent un argument minimal satisfaisant une condition
+* Tu testes systématiquement sur des exemples concrets
+
+---
+
 
 
 
