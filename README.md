@@ -388,6 +388,41 @@ Or,
 `(λx.λy.(y x)) a b → (b a)`
 
 Donc, le terme combinateur `((S (K (S I))) ((S (K K)) I))` se comporte **exactement** comme le λ-terme `λx.λy.(y x)`.
+---
+### Question 6
+
+Justifier de la décidabilité ou non du problème ayant pour données :  
+— Un terme combinatoire \( C_1 \),  
+et pour question :  
+— \( C_1 \) admet-il une forme normale, c’est-à-dire une forme irréductible par les 3 règles données en début de section 2 ?
+
+---
+
+Le problème de déterminer si un terme combinatoire \( C_1 \) admet une forme normale, c'est-à-dire une forme irréductible par les règles de réduction des combinateurs \( S, K, I \), est **non-décidable**.
+
+Voici la justification, basée sur les informations de nos sources :
+
+- **Équivalence des modèles de calcul** :  
+  Les fonctions calculables par machine de Turing sont équivalentes aux fonctions récursives partielles et aux fonctions \(\lambda\)-représentables. Ainsi, le \(\lambda\)-calcul pur, et par extension le système de combinateurs \( S, K, I \) (qui peut représenter n'importe quel \(\lambda\)-terme), ont la même puissance de calcul que les Machines de Turing.
+
+- **Problème de l'arrêt** :  
+  Le problème de l'arrêt, qui consiste à déterminer si une machine de Turing s'arrête sur une entrée donnée, est **non-décidable**.
+
+- **Lien entre forme normale et arrêt** :  
+  Dans le contexte du \(\lambda\)-calcul (et donc des combinateurs), l'existence d'une forme normale pour un terme est directement équivalente à la terminaison du calcul (arrêt de la machine). Un terme est en forme normale s'il ne peut plus être réduit. Si un terme admet une forme normale, cela signifie que sa réduction se termine.
+
+- **Exemple de terme sans forme normale** :  
+  Certains termes, comme \(\Omega = (\Delta \Delta)\) avec \(\Delta = \lambda x.(x x)\), se réduisent indéfiniment à eux-mêmes : \(\Omega \to_\beta \Omega\). Puisque le problème de l'arrêt est indécidable, et que l'existence d'une forme normale est équivalente à la terminaison, la question de savoir si un terme combinatoire admet une forme normale est aussi **indécidable**. De plus, la relation de \(\beta\)-conversion (\(=_{\beta}\)) est elle-même **indécidable**, ce qui renforce cette conclusion.
+
+- **Distinction avec le \(\lambda\)-calcul typé** :  
+  Cette indécidabilité concerne le \(\lambda\)-calcul *pur* (et les combinateurs sans contraintes de type). En revanche, dans le **\(\lambda\)-calcul simplement typé**, tout terme typable est faiblement et fortement normalisable, garantissant ainsi la terminaison et donc la décidabilité du problème. Ici, la question ne précise pas que \( C_1 \) est typé, donc l'indécidabilité s'applique.
+
+---
+
+**En résumé**, déterminer si un terme combinatoire \( C_1 \) admet une forme normale est un problème **indécidable** en général.
+
+
+
 
 | **Catégorie**                      | **Concept**                          | **Définition / Propriété**                                             | **Exemple / Info Clé**                                        |
 | ---------------------------------- | ------------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------- |
