@@ -242,3 +242,150 @@ $$
 ---
 
 Ce terme combinateur se comporte donc exactement comme `λx.λy.(y x)`.
+
+
+
+---
+## Question 3
+
+Voici la version formatée clairement et structurée :
+
+---
+
+**Vérification que le terme combinateur**
+`((S (K (S I))) ((S (K K)) I))`
+**se comporte comme**
+`λx.λy.(y x)`
+
+---
+
+Nous allons appliquer ce terme combinateur à deux arguments arbitraires, notés `a` et `b`, et montrer qu'il se réduit à `(b a)`.
+
+---
+
+### Rappels des règles de réduction des combinateurs :
+
+* `(I x) → x` (Identité)
+* `((K x) y) → x` (Première projection)
+* `(((S x) y) z) → ((x z) (y z))` (Application)
+
+---
+
+### Soit le terme
+
+`C = ((S (K (S I))) ((S (K K)) I))`
+Nous évaluons :
+`C a b`
+
+---
+
+### Étape 1 : Application de `S` externe
+
+`((S (K (S I))) ((S (K K)) I)) a`
+est de la forme `(((S X) Y) Z)` où :
+
+* `X = (K (S I))`
+* `Y = ((S (K K)) I)`
+* `Z = a`
+
+Par la règle de `S` :
+`(((S X) Y) Z) → ((X Z) (Y Z))`
+
+Donc :
+`((S (K (S I))) ((S (K K)) I)) a → ((K (S I)) a) (((S (K K)) I) a)`
+
+---
+
+### Étape 2 : Réduction de `((K (S I)) a)`
+
+De la forme `((K P) Q)` avec :
+
+* `P = (S I)`
+* `Q = a`
+
+Par la règle de `K` :
+`((K P) Q) → P`
+
+Donc :
+`((K (S I)) a) → (S I)`
+
+---
+
+### Étape 3 : Réduction de `(((S (K K)) I) a)`
+
+De la forme `(((S X') Y') Z')` où :
+
+* `X' = (K K)`
+* `Y' = I`
+* `Z' = a`
+
+Par la règle de `S` :
+`(((S X') Y') Z') → ((X' Z') (Y' Z'))`
+
+Donc :
+`(((S (K K)) I) a) → ((K K) a) (I a)`
+
+---
+
+### Étape 4 : Réduction des sous-termes
+
+* `((K K) a)` :
+  Forme `((K P'') Q'')` avec `P''=K` et `Q''=a`
+  Par la règle de `K` :
+  `((K K) a) → K`
+
+* `(I a)` :
+  Forme `(I P''')` avec `P'''=a`
+  Par la règle de `I` :
+  `(I a) → a`
+
+En remplaçant :
+`((K K) a) (I a) → (K a)`
+
+---
+
+### Étape 5 : Assemblage et application de `b`
+
+Le résultat partiel de l’étape 1 est :
+`(S I) (K a)`
+
+On applique maintenant `b` :
+`((S I) (K a)) b`
+
+De la forme `(((S X''') Y''') Z''')` où :
+
+* `X''' = I`
+* `Y''' = (K a)`
+* `Z''' = b`
+
+Par la règle de `S` :
+`(((S X''') Y''') Z''') → ((X''' Z''') (Y''' Z'''))`
+
+Donc :
+`((S I) (K a)) b → (I b) ((K a) b)`
+
+---
+
+### Étape 6 : Réduction finale
+
+* `(I b)` :
+  `(I b) → b`
+
+* `((K a) b)` :
+  `((K a) b) → a`
+
+En remplaçant :
+`(I b) ((K a) b) → (b a)`
+
+---
+
+### Conclusion
+
+Nous avons montré que :
+`((S (K (S I))) ((S (K K)) I)) a b → (b a)`
+
+Or,
+`(λx.λy.(y x)) a b → (b a)`
+
+Donc, le terme combinateur `((S (K (S I))) ((S (K K)) I))` se comporte **exactement** comme le λ-terme `λx.λy.(y x)`.
+
