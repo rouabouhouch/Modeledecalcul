@@ -389,3 +389,46 @@ Or,
 
 Donc, le terme combinateur `((S (K (S I))) ((S (K K)) I))` se comporte **exactement** comme le λ-terme `λx.λy.(y x)`.
 
+| **Catégorie**                      | **Concept**                          | **Définition / Propriété**                                             | **Exemple / Info Clé**                                        |
+| ---------------------------------- | ------------------------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------- |
+| 🔧 Machines de Turing              | Machine de Turing                    | Modèle avec bande infinie, tête lecture/écriture, règles de transition | Simule tout programme : lire/écrire/bouger/changer état       |
+|                                    | Composants                           | M = (V, B, Q, q0, F, T)                                                | T(q,a) = (b, dir, q′) → écrire b, déplacer tête, changer état |
+|                                    | Configuration                        | Instantané : contenu bande + position tête + état                      | (w1, q, w2)                                                   |
+|                                    | Exécution                            | Passage config → config via T                                          | Si T(q,a) défini, exécution possible                          |
+|                                    | MT déterministe                      | Une règle possible par (état, symbole)                                 | Un seul chemin d’exécution                                    |
+|                                    | MT non déterministe                  | Plusieurs transitions possibles                                        | Exploration en arbre                                          |
+| 🧪 Langages & calculabilité        | Langage reconnu                      | Ensemble des mots menant à un état final                               | "1010" reconnu si mène à qf                                   |
+|                                    | Langage récursif (décidable)         | MT s’arrête toujours, accepte si mot ∈ L                               | Ex : vérifier parité                                          |
+|                                    | Langage réc. énumérable (r.é.)       | MT s’arrête si mot ∈ L, sinon boucle ou rejette                        | Problème de l’arrêt                                           |
+|                                    | Langage co-réc. énumérable (co-r.é.) | Le complément est r.é. → MT s’arrête si mot ∉ L                        | Ex : problème de vacuité                                      |
+|                                    | Fonction Turing-calculable           | MT qui calcule f(x) si elle s’arrête sur x                             | f(x) = x+1                                                    |
+|                                    | Thèse de Church-Turing               | Toute fonction calculable par procédure effective l’est par une MT     | MT ≡ λ-calcul ≡ fonctions récursives                          |
+|                                    | MT Universelle                       | MT qui simule toute autre MT                                           | Interpréteur universel                                        |
+| 💥 Problèmes classiques            | Problème de l’arrêt                  | Savoir si M s’arrête sur w ?                                           | Semi-décidable ✅, décidable ❌, co-semi-décidable ❌            |
+|                                    | Problème de la vacuité               | Est-ce que L(M) = ∅ ?                                                  | Indécidable ❌, co-semi-décidable ✅, semi-décidable ❌          |
+|                                    | Non-vacuité                          | L(M) ≠ ∅ ?                                                             | Semi-décidable ✅                                              |
+|                                    | Égalité de langages r.é.             | L(M1) = L(M2) ?                                                        | Ni semi-décidable ni co-semi-décidable ❌                      |
+|                                    | Égalité de fonctions Turing-calc.    | ∀x, f(x) = g(x) ?                                                      | Indécidable, même niveau                                      |
+|                                    | Arrêt uniforme                       | M s’arrête sur toutes les entrées ?                                    | Non r.é., non co-r.é.                                         |
+| 🧠 Définitions logiques            | Décidable                            | MT s’arrête toujours, accepte ssi w ∈ L                                | Langage récursif                                              |
+|                                    | Semi-décidable                       | MT s’arrête si w ∈ L, sinon boucle ou rejette                          | Langage réc. énumérable                                       |
+|                                    | Co-semi-décidable                    | MT s’arrête si w ∉ L, sinon boucle ou rejette                          | Complément est semi-décidable                                 |
+|                                    | L récursif ⇔ L et ¬L r.é.            | Si L et son complément sont semi-décidables ⇒ L est décidable          | Base pour construire des preuves                              |
+| 🔧 Réductions                      | Réduction (décidabilité)             | L1 ↝ L2 et L2 décidable ⇒ L1 décidable                                 | Propagation d’algorithme                                      |
+|                                    | Réduction (indécidabilité)          | L1 indécidable et L1 ↝ L2 ⇒ L2 indécidable                             | Propagation de l’impossibilité                                |
+| 🧱 Théorème de Rice                | Propriétés non triviales             | Toute propriété non triviale de langages r.é. est indécidable          | Ex : vacuité, finitude, égalité                               |
+| 🧩 Classe NP                      | NP                                   | Problèmes dont solution vérifiable en temps polynomial                 | Sudoku, SAT                                                   |
+|                                    | NP-complet                           | Plus durs de NP. Résoudre un = résoudre tous                           | SAT est NP-complet                                            |
+|                                    | Réduction polynomiale                | Transformer problème en un autre rapidement                            | SAT → 3SAT → Clique                                           |
+|                                    | Problèmes NP                         | Tous les problèmes NP sont décidables                                  | Complexes mais calculables                                    |
+| 🛠 Variantes équivalentes          | Alphabet binaire uniquement          | Codage de l’alphabet V sur k bits (0/1)                                | Simulation possible                                           |
+|                                    | Sans transitions sur place           | Simulées via droite puis gauche                                        | Nécessite états intermédiaires                                |
+|                                    | MT à plusieurs bandes                | k bandes simulées sur une seule via encodage                           | Plus lent mais équivalent                                     |
+|                                    | MT à plusieurs têtes                 | Têtes et positions simulées sur une bande                              | Plus complexe mais possible                                   |
+|                                    | MT à deux piles                      | p1 = gauche de tête, p2 = droite                                       | Simulation parfaite possible                                  |
+|                                    | Problème arrêt 2 piles               | Même indécidabilité que MT classique                                   | Problème de l’arrêt                                           |
+| 📚 Clôtures                        | Récursifs (décidables)               | Fermés sous ∪, ∩, ¬                                                    | Très stables algorithmiquement                                |
+|                                    | Récursivement énumérables            | Fermés sous ∪, ∩, **pas** ¬                                            | L_u r.é. mais ¬L_u non r.é.                                   |
+|                                    | Clôture et décidabilité              | L et ¬L semi-décidables ⇒ L est récursif                               | Technique de preuve                                           |
+
+
