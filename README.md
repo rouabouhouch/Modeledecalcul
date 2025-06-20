@@ -123,6 +123,33 @@ Nous utiliserons les définitions des combinateurs fournies dans les sources :
 
 **Ainsi, le combinateur `I` peut être construit à partir de `S` et `K`, ce qui montre qu'il n'est pas strictement nécessaire.**
 
+---
+Question 4.
+
+On rappelle qu’une **variable libre** dans un terme est une variable qui apparaît non liée par un λ dans ce terme.
+
+On peut écrire un terme combinateur de comportement équivalent à n’importe quel λ-terme.
+
+Pour convertir un λ-terme en une application de combinateurs ayant le même comportement, on utilise l’interprétation φ suivante :
+
+1. φ(x) = x
+2. φ((E₁ E₂)) = (φ(E₁) φ(E₂))
+3. (a) φ(λx.E) = (K φ(E)) si x **n’est pas libre** dans E, sinon :
+
+   (b) φ(λx.x) = I
+
+   (c) φ(λx.λy.E) = φ(λx.φ(λy.E)) (si x est libre dans E)
+
+   (d) φ(λx.(E₁ E₂)) = ((S φ(λx.E₁)) φ(λx.E₂)) (si x est libre dans E₁ ou dans E₂)
+
+---
+
+**Exercice :**
+
+Donner un terme combinateur de comportement équivalent à `λx.λy.(y x)`.
+
+---
+
 
 
 
