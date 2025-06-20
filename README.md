@@ -153,3 +153,92 @@ Donner un terme combinateur de comportement équivalent à `λx.λy.(y x)`.
 
 
 
+Pour convertir le λ-terme `λx.λy.(y x)` en un terme combinateur équivalent, on applique récursivement les règles d’interprétation φ :
+
+---
+
+**1.** On commence par
+
+$$
+φ(λx.λy.(y x))
+$$
+
+Le terme est de la forme $λx.E$ avec $E = λy.(y x)$.
+$x$ est libre dans $E$ (puisque $x$ apparaît dans $(y x)$).
+Comme $E$ est une abstraction, on utilise la règle (c) :
+
+$$
+φ(λx.λy.(y x)) = φ(λx.(φ(λy.(y x))))
+$$
+
+---
+
+**2.** On calcule maintenant
+
+$$
+φ(λy.(y x))
+$$
+
+Ici, $y$ est libre dans $(y x)$ et c’est une application $(E_1 E_2)$ avec $E_1 = y$, $E_2 = x$.
+On applique la règle (d) :
+
+$$
+φ(λy.(y x)) = (S φ(λy.y)) (φ(λy.x))
+$$
+
+* $φ(λy.y) = I$ (règle (b))
+* $φ(λy.x) = K x$ (règle (a), car $y$ n’est pas libre dans $x$)
+
+Donc :
+
+$$
+φ(λy.(y x)) = (S I) (K x)
+$$
+
+---
+
+**3.** On revient à
+
+$$
+φ(λx.((S I) (K x)))
+$$
+
+$x$ est libre dans $(K x)$, c’est une application $(A B)$ avec $A = (S I)$, $B = (K x)$.
+On applique la règle (d) :
+
+$$
+φ(λx.((S I) (K x))) = (S φ(λx.(S I))) (φ(λx.(K x)))
+$$
+
+* Pour $φ(λx.(S I))$, $x$ n’est pas libre dans $(S I)$, donc par (a) :
+
+$$
+φ(λx.(S I)) = K (S I)
+$$
+
+* Pour $φ(λx.(K x))$, c’est une application $(K x)$ avec $x$ libre dans $x$, donc on applique (d) :
+
+$$
+φ(λx.(K x)) = (S φ(λx.K)) (φ(λx.x))
+$$
+
+* $φ(λx.K) = K K$ (car $x$ pas libre dans $K$)
+* $φ(λx.x) = I$
+
+Donc :
+
+$$
+φ(λx.(K x)) = (S (K K)) I
+$$
+
+---
+
+**4.** **Résultat final :**
+
+$$
+φ(λx.λy.(y x)) = (S (K (S I))) ((S (K K)) I)
+$$
+
+---
+
+Ce terme combinateur se comporte donc exactement comme `λx.λy.(y x)`.
