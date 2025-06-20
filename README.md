@@ -501,3 +501,71 @@ En gros, \( P_2 \) est au moins aussi dur que \( P_1 \), et ses solutions se vé
 Exemples :  
 - *EXACT COVER BY 3-SETS* est NP-complet grâce à une réduction depuis *TRIPARTITE MATCHING*.  
 - *ENSEMBLE INDÉPENDANT* est NP-complet via une réduction depuis *CLIQUE*.
+- 
+
+
+### Question 8
+
+On suppose que **CLIQUE**, la recherche d’existence d’un sous-graphe complet (ensemble de nœuds d’un graphe où tous les nœuds sont voisins deux à deux) de taille \( k \) dans un graphe, est NP-complet.
+
+On considère le problème **ENSEMBLE INDÉPENDANT** qui a pour données :  
+— Un graphe \( G \),  
+— Un entier \( k \),  
+
+et pour question :  
+— Existe-t-il un ensemble de \( k \) nœuds de \( G \) dont aucun n’est voisin d’un autre ?
+
+Ce problème est dans NP.  
+**Montrer qu’il est NP-complet.**
+
+
+
+Pour montrer que le problème **ENSEMBLE INDÉPENDANT** est **NP-complet**, sachant que **CLIQUE** est NP-complet, on suit ces deux étapes classiques :
+
+---
+
+### 1. ENSEMBLE INDÉPENDANT est dans NP
+
+Le problème :  
+- Données : un graphe \( G \) et un entier \( k \).  
+- Question : existe-t-il un ensemble de \( k \) nœuds dans \( G \) dont aucun n’est voisin d’un autre ?
+
+Vérification rapide :  
+Étant donné une solution candidate (un ensemble de \( k \) nœuds), on peut en temps polynomial vérifier que :  
+- L’ensemble contient bien \( k \) nœuds.  
+- Aucun couple de ces nœuds n’est relié par une arête.  
+
+Donc ENSEMBLE INDÉPENDANT est dans NP.
+
+---
+
+### 2. Réduction polynomiale de CLIQUE à ENSEMBLE INDÉPENDANT
+
+On part d’une instance de CLIQUE \((G, k)\), où :  
+- \( G = (V, E) \) est un graphe.  
+- \( k \) est un entier.
+
+**Construction du graphe complémentaire \(\bar{G} = (V, \bar{E})\) :**  
+- Même ensemble de nœuds \( V \).  
+- \(\bar{E}\) contient toutes les paires \((u,v)\) non reliées par une arête dans \( G \).  
+
+Cette construction est faisable en temps polynomial (ordre \(O(|V|^2)\)).
+
+---
+
+### Équivalence entre CLIQUE dans \( G \) et ENSEMBLE INDÉPENDANT dans \(\bar{G}\) :
+
+- Si \( G \) contient une clique \( C \) de taille \( k \), alors dans \(\bar{G}\), \( C \) est un ensemble indépendant de taille \( k \) (car aucune arête n’existe entre les nœuds de \( C \) dans \(\bar{G}\)).
+
+- Si \(\bar{G}\) contient un ensemble indépendant \( I \) de taille \( k \), alors \( I \) forme une clique dans \( G \) (car toutes les arêtes entre les nœuds de \( I \) sont présentes dans \( G \)).
+
+---
+
+### Conclusion
+
+Comme :  
+- ENSEMBLE INDÉPENDANT est dans NP,  
+- et CLIQUE (NP-complet) se réduit polynomialement à ENSEMBLE INDÉPENDANT,  
+
+on conclut que **ENSEMBLE INDÉPENDANT est NP-complet**.
+
