@@ -411,11 +411,6 @@ Voici la justification, basée sur les informations de nos sources :
 - **Lien entre forme normale et arrêt** :  
   Dans le contexte du \(\lambda\)-calcul (et donc des combinateurs), l'existence d'une forme normale pour un terme est directement équivalente à la terminaison du calcul (arrêt de la machine). Un terme est en forme normale s'il ne peut plus être réduit. Si un terme admet une forme normale, cela signifie que sa réduction se termine.
 
-- **Exemple de terme sans forme normale** :  
-  Certains termes, comme \(\Omega = (\Delta \Delta)\) avec \(\Delta = \lambda x.(x x)\), se réduisent indéfiniment à eux-mêmes : \(\Omega \to_\beta \Omega\). Puisque le problème de l'arrêt est indécidable, et que l'existence d'une forme normale est équivalente à la terminaison, la question de savoir si un terme combinatoire admet une forme normale est aussi **indécidable**. De plus, la relation de \(\beta\)-conversion (\(=_{\beta}\)) est elle-même **indécidable**, ce qui renforce cette conclusion.
-
-- **Distinction avec le \(\lambda\)-calcul typé** :  
-  Cette indécidabilité concerne le \(\lambda\)-calcul *pur* (et les combinateurs sans contraintes de type). En revanche, dans le **\(\lambda\)-calcul simplement typé**, tout terme typable est faiblement et fortement normalisable, garantissant ainsi la terminaison et donc la décidabilité du problème. Ici, la question ne précise pas que \( C_1 \) est typé, donc l'indécidabilité s'applique.
 
 ---
 
