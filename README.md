@@ -73,4 +73,32 @@ L’ensemble des termes de combinateurs est défini inductivement par :
 
 Donner des λ-termes se comportant comme `S`, `K`, `I` (c’est-à-dire donnant les mêmes résultats sur les mêmes paramètres).
 
+Pour répondre à votre question, nous allons donner les λ-termes qui se comportent comme les combinateurs S, K, et I, en nous basant sur leurs définitions fournies.
+
+Voici les λ-termes équivalents pour chaque combinateur :
+
+- **Combinateur I (Identité)**  
+  - Définition : `(I x)` se réduit en `x`.  
+  - **λ-terme équivalent :**  
+    \[
+    \lambda x . x
+    \]  
+  - Explication : Ce λ-terme prend un argument \(x\) et retourne \(x\) lui-même, ce qui correspond exactement au comportement du combinateur identité.
+
+- **Combinateur K (Première projection)**  
+  - Définition : `((K x) y)` se réduit en `x`.  
+  - **λ-terme équivalent :**  
+    \[
+    \lambda x . \lambda y . x
+    \]  
+  - Explication : Ce λ-terme prend un premier argument \(x\), puis un second argument \(y\), et retourne \(x\), ignorant \(y\). Cela modélise parfaitement la projection sur le premier élément.
+
+- **Combinateur S (Application)**  
+  - Définition : `(((S x) y) z)` se réduit en `((x z) (y z))`.  
+  - **λ-terme équivalent :**  
+    \[
+    \lambda x . \lambda y . \lambda z . ((x z) (y z))
+    \]  
+  - Explication : Ce λ-terme prend trois arguments successivement : \(x\), \(y\), et \(z\). Il applique ensuite \(x\) à \(z\), et \(y\) à \(z\), puis applique le résultat de \((x z)\) au résultat de \((y z)\). C’est le comportement exact du combinateur S.
+
 
