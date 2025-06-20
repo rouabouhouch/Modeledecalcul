@@ -14,68 +14,23 @@ Une **expression λ** $E$ est définie inductivement par :
 * $E$, $E_1$, $E_2$ sont des expressions λ (recursif).
 * Pas de types ni constantes, juste variables, abstractions, applications.
 
-Voici ton texte réécrit au propre, clair et formel :
-
 ---
 ### Exercice 1 controle 2020
 ---
+![image](https://github.com/user-attachments/assets/c116c9a6-bb17-44fc-8014-ef7541a564e0)
 
-### Formes normales du λ-calcul pur
+![image](https://github.com/user-attachments/assets/852ec189-8ded-4e67-b0d3-7be997fa9064)
+![image](https://github.com/user-attachments/assets/f05739b5-631d-4fab-80d1-2aab9bfb6e99)
+![image](https://github.com/user-attachments/assets/b243a9e1-342d-4212-9f36-487d0bc485db)
+![image](https://github.com/user-attachments/assets/c75ed716-b763-4c1c-ae73-455363cc5e26)
+![image](https://github.com/user-attachments/assets/fda6ab38-8124-42dc-931c-97bff145ec28)
+![image](https://github.com/user-attachments/assets/70f73d6f-1ca0-425b-9b49-2528f409bf1b)
 
-Montrer que toute expression \(N\) en forme normale est soit :
 
-- une variable,  
-- ou de la forme  
-  \[
-  \lambda x_1 \cdots \lambda x_n . (\cdots ((y E_1) E_2) \cdots E_m)
-  \]
-  avec \(y\) une variable et tous les \(E_i\) en forme normale.
 
----
 
-### Rappels :
 
-- Une expression est en forme normale si elle ne contient aucun rédexe β, c’est-à-dire aucune sous-expression de la forme \((\lambda x . M) N\).
-- Les λ-termes sont construits inductivement :
-  - Variable : \(x\)
-  - Application : \((M N)\)
-  - Abstraction : \(\lambda x . M\)
 
----
-
-### Preuve par induction sur \(N\) :
-
-**Cas 1 :** \(N\) est une variable.  
-Alors \(N = x\) est forcément en forme normale.
-
----
-
-**Cas 2 :** \(N = (M_1 M_2)\) est une application en forme normale.  
-- \(M_1\) **ne peut pas** être une abstraction \(\lambda x . P\) (sinon \(N\) serait un rédexe β).  
-- \(M_1\) et \(M_2\) sont en forme normale.  
-- On peut donc écrire \(N\) sous forme gauche-associative :  
-  \[
-  (\cdots ((y E_1) E_2) \cdots E_m)
-  \]
-  où \(y\) est une variable (la tête à gauche) et les \(E_i\) sont en forme normale.
-
----
-
-**Cas 3 :** \(N = \lambda x . M\) est une abstraction en forme normale.  
-- \(M\) est en forme normale.  
-- Par hypothèse d’induction, \(M\) est soit une variable, soit une application gauche-associative :  
-  \[
-  (\cdots ((y E_1) E_2) \cdots E_m)
-  \]
-- Si \(M\) est une abstraction, on "sort" les abstractions successives :  
-  \[
-  \lambda x \lambda y . M'
-  \]
-- Finalement,  
-  \[
-  N = \lambda x_1 \cdots \lambda x_n . T
-  \]
-  avec \(T\) non-abstraction en forme normale.
 
 ---
 
