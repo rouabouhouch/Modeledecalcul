@@ -128,3 +128,46 @@ avec $y$ une variable et les $E_i$ en forme normale.
 
 **Cette conclusion correspond précisément à ce que l’on voulait démontrer.**
 
+### Exercice 2 2020
+
+
+---
+
+# λ-calcul et combinateurs
+
+On considère le système de combinateurs $S, K, I$ défini comme suit :
+
+* $I$ est le combinateur identité :
+
+  $$
+  (I \; x) \to x,
+  $$
+
+* $K$ est le combinateur de première projection :
+
+  $$
+  ((K \; x) \; y) \to x,
+  $$
+
+* $S$ est le combinateur d’application :
+
+  $$
+  (((S \; x) \; y) \; z) \to ((x \; z) \; (y \; z)).
+  $$
+
+L’ensemble des termes de combinateurs est défini inductivement par :
+
+* une variable est un terme combinateur,
+* un combinateur “primitif” ($S$, $K$ ou $I$) est un terme combinateur,
+* une application notée $(T_1 \; T_2)$ de deux termes de combinateurs $T_1$ et $T_2$ est un terme combinateur.
+
+---
+
+### Question 2
+
+Donner des $\lambda$-termes se comportant comme $S$, $K$, $I$ (c’est-à-dire donnant les mêmes résultats sur les mêmes paramètres).
+
+---
+
+
+
