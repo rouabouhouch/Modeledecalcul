@@ -486,4 +486,44 @@ Voici la justification, basée sur les informations de nos sources :
 |                                    | Récursivement énumérables            | Fermés sous ∪, ∩, **pas** ¬                                            | L_u r.é. mais ¬L_u non r.é.                                   |
 |                                    | Clôture et décidabilité              | L et ¬L semi-décidables ⇒ L est récursif                               | Technique de preuve                                           |
 
+Pour montrer qu'un problème \( P_2 \) est **NP-complet**, en utilisant un problème \( P_1 \) déjà connu comme étant NP-complet, la méthode consiste en deux étapes principales :
+
+1. **Démontrer que \( P_2 \) appartient à la classe NP**.  
+2. **Démontrer que \( P_1 \) peut être réduit polynomialement à \( P_2 \)**.
+
+---
+
+### 1. Démontrer que \( P_2 \) est dans NP
+
+Un problème est dans la classe **NP** (Non-deterministic Polynomial time) si, pour toute solution candidate, il est possible de **vérifier sa validité en temps polynomial** par une machine de Turing déterministe.  
+Même si les sources ne définissent pas explicitement NP, des exemples comme *EXACT COVER BY 3-SETS*, *SET PACKING*, *CIRCUIT LE PLUS LONG* et *ENSEMBLE INDÉPENDANT* montrent que pour être dans NP, une solution proposée doit pouvoir être rapidement vérifiée.  
+Pour \( P_2 \), cela signifie qu’il existe un algorithme qui, donné une instance et une solution candidate, décide en temps polynomial si la solution est correcte.
+
+---
+
+### 2. Démontrer que \( P_1 \) peut être réduit polynomialement à \( P_2 \) (\( P_1 \le_P P_2 \))
+
+Cette étape établit la **dureté** de \( P_2 \). Une **réduction** d’un problème \( L_1 \) vers un problème \( L_2 \) est une fonction calculable en temps polynomial \( f \) telle que :  
+\[
+w \in L_1 \iff f(w) \in L_2
+\]  
+L’idée est de transformer toute instance de \( P_1 \) en une instance de \( P_2 \) rapidement (en temps polynomial), de sorte que l’instance initiale ait une solution si et seulement si la nouvelle aussi.  
+Si une telle réduction existe, alors \( P_2 \) est au moins aussi difficile que \( P_1 \). Puisque \( P_1 \) est NP-complet, cela fait de \( P_2 \) un problème **NP-difficile**.
+
+---
+
+### Conclusion : \( P_2 \) est NP-complet
+
+Si \( P_2 \in \text{NP} \) et \( P_2 \) est NP-difficile (via la réduction polynomiale de \( P_1 \) à \( P_2 \)), alors \( P_2 \) est **NP-complet**.
+
+---
+
+### Résumé de la méthode
+
+- **Prouver que \( P_2 \in \text{NP} \)** : Montrer qu’une solution peut être vérifiée en temps polynomial.  
+- **Prouver que \( P_1 \le_P P_2 \)** : Construire une transformation polynomiale préservant la solution.
+
+---
+
+Les sources illustrent cette méthode avec, par exemple, la preuve que *EXACT COVER BY 3-SETS* est NP-complet via une réduction de *TRIPARTITE MATCHING*, et que *ENSEMBLE INDÉPENDANT* est NP-complet via une réduction depuis *CLIQUE*.
 
