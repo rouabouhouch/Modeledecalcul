@@ -18,19 +18,22 @@ Voici ton texte réécrit au propre, clair et formel :
 
 ---
 ### Exercice 1 controle 2020
-Okay, j’ai capté que ça coinçait — pas de panique, on va remettre ça au carré. Ce genre de démonstration, c’est hyper subtil, alors on va reprendre doucement et clairement, étape par étape, en mode rigoureux mais pas prise de tête.
 
 ---
 
-# Correction claire et rigoureuse (avec les bonnes formes)
+Ok, je vois que le problème vient surtout de la mise en forme LaTeX qui a un peu foiré dans ton texte copié-collé. Je te réécris ça **au propre**, bien formaté en Markdown + LaTeX, avec les bonnes virgules et parenthèses — prêt à être copié direct sans souci :
 
-**Problème :** Montrer que toute expression $N$ en **forme normale** du λ-calcul pur est soit :
+---
+
+# Correction claire et rigoureuse
+
+**Problème :** Montrer que toute expression $N$ en forme normale du λ-calcul pur est soit :
 
 * une variable,
 * ou bien de la forme
 
   $$
-  \lambda x_1 \cdots \lambda x_n. ( \cdots ((y\, E_1) E_2) \cdots E_m )
+  \lambda x_1 \cdots \lambda x_n. \big( \cdots ((y \, E_1) E_2) \cdots E_m \big)
   $$
 
   avec $y$ une variable, et tous les $E_i$ en forme normale.
@@ -39,7 +42,7 @@ Okay, j’ai capté que ça coinçait — pas de panique, on va remettre ça au 
 
 ## Rappels importants
 
-* Une expression est en **forme normale** si elle **ne contient aucun rédexe β**, c’est-à-dire aucune sous-expression réductible de la forme $(\lambda x. M) N$.
+* Une expression est en **forme normale** si elle ne contient aucun rédexe β, c’est-à-dire aucune sous-expression réductible de la forme $(\lambda x. M) N$.
 * Les termes du λ-calcul sont construits inductivement par :
 
   * Variables : $x$
@@ -48,7 +51,7 @@ Okay, j’ai capté que ça coinçait — pas de panique, on va remettre ça au 
 
 ---
 
-## Démonstration par induction structurelle sur la forme de $N$ :
+## Démonstration par induction structurelle sur $N$ :
 
 ### 1. Cas où $N$ est une variable
 
@@ -56,19 +59,27 @@ Okay, j’ai capté que ça coinçait — pas de panique, on va remettre ça au 
 * Elle est donc forcément en forme normale.
 * C’est la première forme possible.
 
+---
+
 ### 2. Cas où $N = (M_1 M_2)$ est une application
 
-* $N$ est en forme normale, donc **pas de rédexe** possible.
-* Donc, $M_1$ **ne peut pas** être une abstraction $\lambda x. P$, sinon $N = (\lambda x. P) M_2$ serait un rédexe β, donc réductible — impossible car $N$ est en forme normale.
-* Donc $M_1$ est **soit une variable, soit une application** (mais pas une abstraction).
-* De plus, $M_1$ et $M_2$ doivent aussi être en forme normale, sinon $N$ serait réductible via une réduction interne à $M_1$ ou $M_2$.
+* $N$ est en forme normale, donc **pas de rédexe possible**.
+* Donc, $M_1$ **ne peut pas** être une abstraction $\lambda x. P$, sinon
+
+  $$
+  N = (\lambda x. P) M_2
+  $$
+
+  serait un rédexe β, donc réductible — ce qui contredit que $N$ est en forme normale.
+* Donc $M_1$ est soit une variable, soit une application (mais pas une abstraction).
+* De plus, $M_1$ et $M_2$ doivent tous deux être en forme normale, sinon $N$ pourrait être réduit via une réduction interne dans $M_1$ ou $M_2$.
 
 ---
 
 **On peut donc décomposer $N$ comme une application gauche-associative de la forme :**
 
 $$
-(\cdots ((y E_1) E_2) \cdots E_m)
+(\cdots ((y \, E_1) E_2) \cdots E_m)
 $$
 
 * où $y$ est une variable (car $M_1$ n’est pas abstraction, on remonte à la variable la plus à gauche),
@@ -86,35 +97,37 @@ $$
 * $M$ est soit une variable, soit une application gauche-associative de la forme
 
   $$
-  (\cdots ((y E_1) E_2) \cdots E_m)
+  (\cdots ((y \, E_1) E_2) \cdots E_m)
   $$
 
   avec $y$ une variable et tous les $E_i$ en forme normale.
 
-* Si $M$ est aussi une abstraction, on la “sort” en la mettant devant $\lambda x$ (on peut écrire :
+* Si $M$ est aussi une abstraction, on la “sort” en la mettant devant $\lambda x$, on écrit alors :
 
   $$
   \lambda x \lambda y. M'
   $$
 
-  ce qui rentre dans la forme souhaitée avec plusieurs abstractions consécutives).
+  ce qui rentre dans la forme souhaitée avec plusieurs abstractions consécutives.
 
 ---
 
-## Conclusion finale :
+## Conclusion finale
 
 Toute expression $N$ en forme normale est soit :
 
-1. Une variable,
-2. Ou bien une abstraction $\lambda x_1 \cdots \lambda x_n$ appliquée à une expression non-abstraite qui est une application gauche-associative
+* Une variable,
+* Ou bien une abstraction
 
-   $$
-   (\cdots ((y E_1) E_2) \cdots E_m)
-   $$
+  $$
+  \lambda x_1 \cdots \lambda x_n. (\cdots ((y \, E_1) E_2) \cdots E_m)
+  $$
 
-   où $y$ est une variable et tous les $E_i$ sont en forme normale.
+  où $y$ est une variable et tous les $E_i$ sont en forme normale.
 
 ---
+
+
 
 
 
