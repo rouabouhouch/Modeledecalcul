@@ -73,32 +73,56 @@ L’ensemble des termes de combinateurs est défini inductivement par :
 
 Donner des λ-termes se comportant comme `S`, `K`, `I` (c’est-à-dire donnant les mêmes résultats sur les mêmes paramètres).
 
-Pour répondre à votre question, nous allons donner les λ-termes qui se comportent comme les combinateurs S, K, et I, en nous basant sur leurs définitions fournies.
+![image](https://github.com/user-attachments/assets/86f8dbf9-fdb8-4828-aa65-92b35687d05c)
+![image](https://github.com/user-attachments/assets/e08b2556-b187-460a-9e24-0a63ff7dc1b3)
+![image](https://github.com/user-attachments/assets/ee6396e6-b338-4b2f-b6c6-321bb3119d02)
 
-Voici les λ-termes équivalents pour chaque combinateur :
+### Question 3
+Question 3. Montrer que ((S K) K) se comporte comme I (et donc que I n’est pas necessaire).
 
-- **Combinateur I (Identité)**  
-  - Définition : `(I x)` se réduit en `x`.  
-  - **λ-terme équivalent :**  
-    \[
-    \lambda x . x
-    \]  
-  - Explication : Ce λ-terme prend un argument \(x\) et retourne \(x\) lui-même, ce qui correspond exactement au comportement du combinateur identité.
 
-- **Combinateur K (Première projection)**  
-  - Définition : `((K x) y)` se réduit en `x`.  
-  - **λ-terme équivalent :**  
-    \[
-    \lambda x . \lambda y . x
-    \]  
-  - Explication : Ce λ-terme prend un premier argument \(x\), puis un second argument \(y\), et retourne \(x\), ignorant \(y\). Cela modélise parfaitement la projection sur le premier élément.
 
-- **Combinateur S (Application)**  
-  - Définition : `(((S x) y) z)` se réduit en `((x z) (y z))`.  
-  - **λ-terme équivalent :**  
-    \[
-    \lambda x . \lambda y . \lambda z . ((x z) (y z))
-    \]  
-  - Explication : Ce λ-terme prend trois arguments successivement : \(x\), \(y\), et \(z\). Il applique ensuite \(x\) à \(z\), et \(y\) à \(z\), puis applique le résultat de \((x z)\) au résultat de \((y z)\). C’est le comportement exact du combinateur S.
+Pour démontrer que `((S K) K)` se comporte comme `I`, nous devons montrer que pour tout argument `x`, l'application de `((S K) K)` à `x` produit le même résultat que l'application de `I` à `x`.
+
+Nous utiliserons les définitions des combinateurs fournies dans les sources :
+
+* **I** (Identité) : `(I x) → x`.
+* **K** (Première projection) : `((K x) y) → x`.
+* **S** (Application) : `(((S x) y) z) → ((x z) (y z))`.
+
+---
+
+### Réduction de `((S K) K) x` :
+
+1. **Terme initial :**
+   `((S K) K) x`
+   Identifions ce terme avec la forme `(((S A) B) C)`, où :
+
+   * `A = K`
+   * `B = K`
+   * `C = x`
+
+   Appliquons la règle de réduction du combinateur **S** :
+   `(((S A) B) C) → ((A C) (B C))`
+
+   Donc :
+   `((S K) K) x → ((K x) (K x))`
+
+2. **Réduction de `((K x) (K x))` :**
+   `(K x)` est une fonction qui prend un argument et retourne toujours `x`, ignorant cet argument.
+   Appliquons la règle :
+   `((K A) B) → A`
+
+   Ici, `A = x` et `B = (K x)`. Donc :
+   `((K x) (K x)) → x`
+
+3. **Conclusion :**
+   Puisque `((S K) K) x → x` pour tout `x`, le terme `((S K) K)` se comporte comme le combinateur identité `I`.
+
+---
+
+**Ainsi, le combinateur `I` peut être construit à partir de `S` et `K`, ce qui montre qu'il n'est pas strictement nécessaire.**
+
+
 
 
