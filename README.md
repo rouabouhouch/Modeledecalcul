@@ -128,8 +128,7 @@ avec $y$ une variable et les $E_i$ en forme normale.
 
 **Cette conclusion correspond précisément à ce que l’on voulait démontrer.**
 
-### Exercice 2 2020
-
+Voici une version bien formatée et claire de ton texte :
 
 ---
 
@@ -168,6 +167,4 @@ L’ensemble des termes de combinateurs est défini inductivement par :
 Donner des $\lambda$-termes se comportant comme $S$, $K$, $I$ (c’est-à-dire donnant les mêmes résultats sur les mêmes paramètres).
 
 ---
-
-
 
